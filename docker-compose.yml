@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Notre application Spring Boot
+  backend:
+    build: . # Construit l'image à partir du Dockerfile local
+    container_name: weline_backend
+    ports:
+      - "8081:8080" # Expose le port de l'app sur la machine hôte
+    environment:
+      # On configure l'app pour qu'elle se connecte aux autres conteneurs
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/weline_db
+      - SPRING_DATASOURCE_USERNAME=weline
+      - SPRING_DATASOURCE_PASSWORD=supersecret
+      - SPRING_REDIS_HOST=redis_cache
+    depends_on:
+      - postgres_db
+      - redis_cache
+
+  # La base de données PostgreSQL
+  postgres_db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    environment:
+      - POSTGRES_DB=weline_db
+      - POSTGRES_USER=weline
+      - POSTGRES_PASSWORD=supersecret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Optionnel : pour se connecter à la DB depuis la machine locale
+
+  # Le cache Redis
+  redis_cache:
+    image: redis:7-alpine
+    container_name: redis_cache
+    ports:
+      - "6379:6379" # Optionnel : pour inspecter le cache
+
+volumes:
+  postgres_data: # Assure la persistance des données de la base

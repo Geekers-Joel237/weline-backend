@@ -1,0 +1,99 @@
+Absolument. C'est la touche finale parfaite pour valider l'Epic 1. Un bon `README.md` est la porte d'entrée du projet pour tout développeur (y compris nous-mêmes dans 3 mois). Il doit être clair, concis et donner toutes les informations nécessaires pour démarrer.
+
+C'est la documentation qui prouve que notre fondation est solide.
+
+Voici une proposition complète pour notre `README.md`. Vous pouvez la copier-coller directement dans un fichier `README.md` à la racine de votre projet.
+
+-----
+
+# Weline - Service Backend
+
+Le service backend pour Weline, une plateforme de gestion de files d'attente virtuelles et un futur assistant de démarches, conçu pour le contexte camerounais. Ce projet est construit avec une philosophie privilégiant la robustesse, la scalabilité et les meilleures pratiques de développement (DDD, TDD) dès le départ.
+
+## Stack Technique
+
+Ce projet utilise une sélection de technologies modernes et éprouvées pour garantir une fondation solide :
+
+- **Langage :** Java 21 (LTS)
+- **Framework :** Spring Boot 3.x
+- **Base de Données :** PostgreSQL 16
+- **Cache :** Redis 7
+- **Gestion de Build :** Gradle
+- **Sécurité :** Spring Security
+- **Observabilité :** Spring Boot Actuator & Logback
+- **Conteneurisation :** Docker & Docker Compose
+
+## Prérequis
+
+Avant de commencer, assurez-vous d'avoir les outils suivants installés sur votre machine :
+
+- [Git](https://git-scm.com/)
+- [JDK 21](https://adoptium.net/) (Eclipse Temurin est recommandé)
+- [Docker](https://www.docker.com/products/docker-desktop/) et Docker Compose
+- Un IDE de votre choix (ex: [IntelliJ IDEA](https://www.jetbrains.com/idea/) ou [VS Code](https://code.visualstudio.com/))
+
+## Installation & Lancement (Environnement Local)
+
+L'intégralité de l'environnement de développement est gérée par Docker Compose. Aucune installation manuelle de PostgreSQL ou Redis n'est nécessaire.
+
+1.  **Clonez le dépôt :**
+
+    ```bash
+    git clone [URL_DE_VOTRE_DEPOT_GIT]
+    cd weline-backend
+    ```
+
+2.  **Lancez l'environnement complet :**
+    Cette commande unique va construire l'image Docker de l'application Java, télécharger les images de PostgreSQL et Redis, et démarrer les trois services en les reliant entre eux.
+
+    ```bash
+    docker-compose up --build
+    ```
+
+    La première exécution peut prendre plusieurs minutes, le temps de télécharger les images de base et de construire l'application.
+
+3.  **Vérifiez que tout fonctionne :**
+    Une fois le démarrage terminé, vous devriez voir les logs des trois services dans votre terminal. Le log du service `weline_backend` devrait se terminer par une bannière ASCII de Spring Boot et des messages indiquant que l'application a démarré.
+
+    Vous pouvez maintenant vérifier l'état de santé de l'application en accédant à l'URL suivante dans votre navigateur :
+    [http://localhost:8080/actuator/health](https://www.google.com/search?q=http://localhost:8080/actuator/health)
+    Vous devriez voir `{"status":"UP"}`.
+
+4.  **Pour arrêter l'environnement :**
+    Appuyez sur `Ctrl + C` dans le terminal, puis exécutez la commande suivante pour arrêter et supprimer les conteneurs.
+
+    ```bash
+    docker-compose down
+    ```
+
+## Architecture du Projet
+
+Le code est structuré en suivant les principes du **Domain-Driven Design (DDD)** sous forme d'un **Monolithe Modulaire**. Chaque fonctionnalité métier est isolée dans son propre package (Bounded Context) pour une meilleure organisation et une maintenance facilitée.
+
+- `com.geekersjoel237.weline.iam` : Gestion des identités et des accès (utilisateurs, agents, authentification).
+- `com.geekersjoel237.weline.partners` : Gestion des entreprises partenaires et de leurs points de service.
+- `com.geekersjoel237.weline.queues` : Le cœur du métier. Gère toute la logique des files d'attente, des tickets et des tours.
+- `com.geekersjoel237.weline.notifications` : Module technique responsable de l'envoi des notifications externes (WhatsApp, Push).
+- `com.geekersjoel237.weline.shared` : Configurations communes, classes utilitaires et infrastructure partagée (ex: `SecurityConfig`).
+
+## Stratégie de CI/CD
+
+Ce projet utilise **GitHub Actions** pour l'intégration continue. Le workflow défini dans `.github/workflows/build.yml` se déclenche automatiquement à chaque `push` sur les branches `main` et `develop`.
+
+Ce pipeline garantit que :
+
+1.  Le projet compile correctement.
+2.  Tous les tests unitaires et d'intégration (`./gradlew test`) passent avec succès.
+
+Cela assure qu'aucun code défectueux n'est intégré à la base de code principale.
+
+## Roadmap du MVP
+
+Statut du développement des fonctionnalités clés pour la version minimum viable.
+
+- [x] **Epic 1 : Fondations du Projet & Infrastructure**
+- [ ] **Epic 2 : Onboarding & Authentification des Utilisateurs**
+- [ ] **Epic 3 : Le Cœur de la File d'Attente (Expérience Utilisateur)**
+- [ ] **Epic 4 : Le Dashboard de l'Agent**
+
+-----
