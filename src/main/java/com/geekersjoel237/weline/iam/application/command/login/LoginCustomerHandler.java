@@ -29,19 +29,18 @@ public class LoginCustomerHandler {
     }
 
     @Transactional
-    public void handle(LoginCommand command) {
+    public LoginResponse handle(LoginCommand command) {
         PhoneNumber phoneNumber;
         try {
             phoneNumber = new PhoneNumber(command.phoneNumber());
         } catch (CustomIllegalArgumentException e) {
-            throw new RuntimeException(e);
+            return LoginResponse.ofFailure(e.getMessage());
         }
 
         var customer = customerRepository.ofPhoneNumber(phoneNumber.value())
                 .orElseThrow(() -> new NotFoundEntityException("Customer with phone number " + phoneNumber.value() + " not found."));
 
         var newOtp = Otp.generateOtp();
-
 
         var customerOtp = otpRepository.ofCustomerId(customer.snapshot().id()).orElseThrow(
                 () -> new NotFoundEntityException("OTP for customer with id " + customer.snapshot().id() + " not found.")
@@ -51,5 +50,7 @@ public class LoginCustomerHandler {
         otpRepository.update(customerOtp.snapshot());
 
         otpSender.send(phoneNumber.value(), newOtp.value());
+
+        return LoginResponse.ofSuccess("OTP sent successfully. Please check your WhatsApp.");
     }
 }

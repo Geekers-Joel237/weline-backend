@@ -1,5 +1,6 @@
 package com.geekersjoel237.weline.iam.infrastructure.web.api;
 
+import com.geekersjoel237.weline.iam.application.command.login.LoginResponse;
 import com.geekersjoel237.weline.iam.application.command.register.RegisterCommandResponse;
 import com.geekersjoel237.weline.iam.application.command.validateOtp.ValidateOtpResponse;
 import com.geekersjoel237.weline.iam.infrastructure.web.dto.LoginRequestDto;
@@ -55,6 +56,6 @@ public interface RegistrationApi {
             @ApiResponse(responseCode = "404", description = "Aucun client trouvé pour ce numéro de téléphone", content = @Content)
     })
     @PostMapping("/login")
-    ResponseEntity<com.geekersjoel237.weline.shared.infrastructure.web.ApiResponse<Void>> login(@Valid @RequestBody LoginRequestDto request);
+    ResponseEntity<com.geekersjoel237.weline.shared.infrastructure.web.ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequestDto request);
 
 }

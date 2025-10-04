@@ -2,6 +2,7 @@ package com.geekersjoel237.weline.iam.infrastructure.web.controllers;
 
 import com.geekersjoel237.weline.iam.application.command.login.LoginCommand;
 import com.geekersjoel237.weline.iam.application.command.login.LoginCustomerHandler;
+import com.geekersjoel237.weline.iam.application.command.login.LoginResponse;
 import com.geekersjoel237.weline.iam.application.command.register.RegisterCommandResponse;
 import com.geekersjoel237.weline.iam.application.command.register.RegisterCustomerCommand;
 import com.geekersjoel237.weline.iam.application.command.register.RegisterCustomerHandler;
@@ -70,13 +71,13 @@ public class RegistrationController implements RegistrationApi {
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Void>> login(LoginRequestDto request) {
+    public ResponseEntity<ApiResponse<LoginResponse>> login(LoginRequestDto request) {
         var command = new LoginCommand(request.phoneNumber());
 
-        loginCustomerHandler.handle(command);
+        var response = loginCustomerHandler.handle(command);
 
         return new ResponseEntity<>(
-                ApiResponse.success("OTP sent successfully. Please check your WhatsApp.", null),
+                ApiResponse.success("OTP sent successfully. Please check your WhatsApp.", response),
                 HttpStatus.OK
         );
     }

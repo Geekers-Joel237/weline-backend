@@ -7,6 +7,7 @@ import com.geekersjoel237.weline.iam.domain.repositories.OtpRepository;
 import com.geekersjoel237.weline.iam.domain.service.TokenService;
 import com.geekersjoel237.weline.iam.domain.vo.PhoneNumber;
 import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
+import com.geekersjoel237.weline.shared.domain.exceptions.NotFoundEntityException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +43,9 @@ public class ValidateOtpHandler {
 
             Optional<Customer> optionalCustomer = customerRepository.ofPhoneNumber(phoneNumber.value());
             if (optionalCustomer.isEmpty()) {
-                return ValidateOtpResponse.ofFailure("Customer with phone number " + phoneNumber.value() + " not found");
+                throw new NotFoundEntityException("Customer with phone number " + phoneNumber.value() + " not found");
             }
+            
             Customer existingCustomer = optionalCustomer.get();
 
             Optional<CustomerOtp> optionalOtp = otpRepository.ofCustomerId(existingCustomer.snapshot().id());

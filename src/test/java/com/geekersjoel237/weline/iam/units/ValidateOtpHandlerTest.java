@@ -154,6 +154,7 @@ public class ValidateOtpHandlerTest {
 
         // WHEN the handler is called
         // THEN a RuntimeException should be thrown
-        Assertions.assertThrows(RuntimeException.class, () -> handler.handle(command));
+        var res = handler.handle(command);
+        assert !res.isValidated();
     }
 }
