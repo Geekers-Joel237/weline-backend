@@ -11,4 +11,7 @@ public interface TokenService {
 
     String generateToken(Customer customer);
 
+    boolean isTokenValid(String token);
+
+    String getCustomerIdFromToken(String token);
 }

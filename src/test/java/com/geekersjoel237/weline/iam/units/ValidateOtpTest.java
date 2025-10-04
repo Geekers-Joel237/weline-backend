@@ -5,9 +5,11 @@ import com.geekersjoel237.weline.iam.application.command.register.RegisterCustom
 import com.geekersjoel237.weline.iam.application.command.validateOtp.ValidateOtpCommand;
 import com.geekersjoel237.weline.iam.application.command.validateOtp.ValidateOtpHandler;
 import com.geekersjoel237.weline.iam.domain.repositories.OtpRepository;
+import com.geekersjoel237.weline.iam.domain.service.TokenService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -20,10 +22,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ValidateOtpTest {
 
     private OtpRepository otpRepository;
+    private TokenService tokenService;
 
     @BeforeEach
     void setup() {
         otpRepository = new InMemoryOtpRepository();
+        tokenService = new InMemoryTokenService();
     }
 
     @Test
@@ -47,7 +51,7 @@ public class ValidateOtpTest {
         assert otpRepository.ofCustomerId("customer-id-123").isPresent();
 
         // WHEN
-        var validateOtpHandler = new ValidateOtpHandler(customerRepository, otpRepository);
+        var validateOtpHandler = new ValidateOtpHandler(customerRepository, otpRepository, tokenService);
         var validateCommand = new ValidateOtpCommand(
                 phoneNumber,
                 otp

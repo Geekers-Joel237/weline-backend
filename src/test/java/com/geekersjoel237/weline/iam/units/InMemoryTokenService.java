@@ -15,4 +15,14 @@ public class InMemoryTokenService implements TokenService {
     public String generateToken(Customer customer) {
         return UUID.randomUUID().toString();
     }
+
+    @Override
+    public boolean isTokenValid(String token) {
+        return true;
+    }
+
+    @Override
+    public String getCustomerIdFromToken(String token) {
+        return "";
+    }
 }

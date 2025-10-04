@@ -2,6 +2,7 @@ package com.geekersjoel237.weline.iam.infrastructure.security;
 
 import com.geekersjoel237.weline.iam.domain.entities.Customer;
 import com.geekersjoel237.weline.iam.domain.service.TokenService;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,5 +42,22 @@ public class JwtTokenService implements TokenService {
                 .expiration(expiryDate)
                 .signWith(jwtSecretKey, Jwts.SIG.HS512)
                 .compact();
+    }
+
+    @Override
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parser().verifyWith(jwtSecretKey).build().parseSignedClaims(token);
+            return true;
+        } catch (JwtException e) {
+            // JwtException est l'exception générale pour tout problème de token (expiré, malformé, signature invalide...)
+            // On pourrait logger l'erreur spécifique ici si besoin.
+            return false;
+        }
+    }
+
+    @Override
+    public String getCustomerIdFromToken(String token) {
+        return Jwts.parser().verifyWith(jwtSecretKey).build().parseSignedClaims(token).getPayload().getSubject();
     }
 }
