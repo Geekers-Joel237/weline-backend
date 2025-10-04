@@ -2,6 +2,7 @@ package com.geekersjoel237.weline.iam.infrastructure.web.api;
 
 import com.geekersjoel237.weline.iam.application.command.register.RegisterCommandResponse;
 import com.geekersjoel237.weline.iam.application.command.validateOtp.ValidateOtpResponse;
+import com.geekersjoel237.weline.iam.infrastructure.web.dto.LoginRequestDto;
 import com.geekersjoel237.weline.iam.infrastructure.web.dto.RegistrationRequestDto;
 import com.geekersjoel237.weline.iam.infrastructure.web.dto.VerifyOtpRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,4 +45,16 @@ public interface RegistrationApi {
     })
     @PostMapping("/verify-otp")
     ResponseEntity<com.geekersjoel237.weline.shared.infrastructure.web.ApiResponse<ValidateOtpResponse>> verifyOtp(@Valid @RequestBody VerifyOtpRequestDto request);
+
+
+    @Operation(summary = "Demander un OTP de connexion pour un client existant",
+            description = "Lance le processus de connexion en envoyant un nouvel OTP via WhatsApp si le numéro de téléphone correspond à un compte existant.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OTP de connexion envoyé avec succès"),
+            @ApiResponse(responseCode = "400", description = "Données invalides (ex: format du numéro)", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Aucun client trouvé pour ce numéro de téléphone", content = @Content)
+    })
+    @PostMapping("/login")
+    ResponseEntity<com.geekersjoel237.weline.shared.infrastructure.web.ApiResponse<Void>> login(@Valid @RequestBody LoginRequestDto request);
+
 }

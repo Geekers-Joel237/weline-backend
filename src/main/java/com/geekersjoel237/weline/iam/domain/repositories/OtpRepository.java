@@ -16,4 +16,6 @@ public interface OtpRepository {
     void add(CustomerOtp.Snapshot customerOtp) throws ErrorOnPersistEntityException;
 
     void delete(String id) throws ErrorOnPersistEntityException;
+
+    void update(CustomerOtp.Snapshot customerOtp) throws ErrorOnPersistEntityException;
 }

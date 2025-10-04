@@ -48,4 +48,9 @@ public class InMemoryOtpRepository implements OtpRepository {
     public void delete(String id) throws ErrorOnPersistEntityException {
         this.customerOtps.remove(id);
     }
+
+    @Override
+    public void update(CustomerOtp.Snapshot customerOtp) throws ErrorOnPersistEntityException {
+        this.customerOtps.put(customerOtp.id(), customerOtp);
+    }
 }

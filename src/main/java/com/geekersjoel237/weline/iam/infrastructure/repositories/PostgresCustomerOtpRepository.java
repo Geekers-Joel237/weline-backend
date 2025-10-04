@@ -48,4 +48,19 @@ public class PostgresCustomerOtpRepository implements OtpRepository {
             throw new ErrorOnPersistEntityException("Failed to soft-delete customer OTP with id: " + id, e);
         }
     }
+
+    @Override
+    public void update(CustomerOtp.Snapshot customerOtp) throws ErrorOnPersistEntityException {
+        try {
+            CustomerOtpEntity entity = jpaRepository.findById(customerOtp.id()).orElseThrow();
+            entity.update(
+                    customerOtp.otpCode(),
+                    customerOtp.expiredIn()
+            );
+            jpaRepository.save(entity);
+        } catch (DataAccessException e) {
+            throw new ErrorOnPersistEntityException("Failed to update customer OTP with id: " + customerOtp.id(), e);
+        }
+
+    }
 }

@@ -57,4 +57,9 @@ public class CustomerOtpEntity extends BaseEntity {
         }
 
     }
+
+    public void update(String otpCode, String expiredId) {
+        this.otpCode = otpCode;
+        this.expiredIn = Instant.parse(expiredId);
+    }
 }

@@ -12,7 +12,7 @@ import com.geekersjoel237.weline.shared.domain.vo.Id;
 public class CustomerOtp {
     private final Id id;
     private final Id customerId;
-    private final Otp otp;
+    private Otp otp;
 
     public CustomerOtp(Id id, Id customerId, Otp otp) {
         this.id = id;
@@ -43,6 +43,10 @@ public class CustomerOtp {
 
     public Snapshot snapshot() {
         return new Snapshot(id.value(), customerId.value(), otp.value(), otp.expiredIn().toString());
+    }
+
+    public void updateOtp(Otp newOtp) {
+        otp = newOtp;
     }
 
 
