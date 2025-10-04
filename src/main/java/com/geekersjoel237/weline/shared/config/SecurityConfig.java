@@ -21,7 +21,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.requestMatchers("/actuator/**").permitAll()
+                        authorizeRequests.requestMatchers(
+                                        // -- Endpoints Actuator --
+                                        "/actuator/**",
+
+                                        // -- Endpoints Swagger UI --
+                                        "/v3/api-docs",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**"
+
+                                ).permitAll()
                                 .anyRequest().authenticated()
                 ).httpBasic(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)

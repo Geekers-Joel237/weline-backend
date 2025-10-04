@@ -1,8 +1,12 @@
-Absolument. C'est la touche finale parfaite pour valider l'Epic 1. Un bon `README.md` est la porte d'entrée du projet pour tout développeur (y compris nous-mêmes dans 3 mois). Il doit être clair, concis et donner toutes les informations nécessaires pour démarrer.
+Excellente idée. C'est une étape essentielle. Le `README.md` doit toujours refléter l'état actuel du projet et fournir les informations les plus utiles aux développeurs. L'ajout de Swagger UI est une information capitale.
 
-C'est la documentation qui prouve que notre fondation est solide.
+Nous allons mettre à jour le `README.md` pour inclure la documentation de l'API.
 
-Voici une proposition complète pour notre `README.md`. Vous pouvez la copier-coller directement dans un fichier `README.md` à la racine de votre projet.
+-----
+
+Voici la version complète et mise à jour de votre fichier `README.md`. Les sections modifiées sont principalement "Stack Technique" et une nouvelle section "Documentation de l'API (Swagger UI)" qui remplace l'ancienne section "Endpoints Clés".
+
+**Action :** Remplacez le contenu de votre `README.md` par le texte ci-dessous.
 
 -----
 
@@ -21,6 +25,7 @@ Ce projet utilise une sélection de technologies modernes et éprouvées pour ga
 - **Gestion de Build :** Gradle
 - **Sécurité :** Spring Security
 - **Observabilité :** Spring Boot Actuator & Logback
+- **Documentation API :** springdoc-openapi (Swagger UI)
 - **Conteneurisation :** Docker & Docker Compose
 
 ## Prérequis
@@ -53,11 +58,10 @@ L'intégralité de l'environnement de développement est gérée par Docker Comp
     La première exécution peut prendre plusieurs minutes, le temps de télécharger les images de base et de construire l'application.
 
 3.  **Vérifiez que tout fonctionne :**
-    Une fois le démarrage terminé, vous devriez voir les logs des trois services dans votre terminal. Le log du service `weline_backend` devrait se terminer par une bannière ASCII de Spring Boot et des messages indiquant que l'application a démarré.
+    Une fois le démarrage terminé, vous devriez voir les logs des trois services dans votre terminal.
 
-    Vous pouvez maintenant vérifier l'état de santé de l'application en accédant à l'URL suivante dans votre navigateur :
-    [http://localhost:8080/actuator/health](https://www.google.com/search?q=http://localhost:8080/actuator/health)
-    Vous devriez voir `{"status":"UP"}`.
+    * **Test de santé rapide :** Ouvrez votre navigateur et allez sur [http://localhost:8080/actuator/health](https://www.google.com/search?q=http://localhost:8080/actuator/health). Vous devriez voir `{"status":"UP"}`.
+    * **Explorez l'API :** La meilleure façon de vérifier que tout est fonctionnel est d'utiliser la documentation interactive. Voir la section ci-dessous.
 
 4.  **Pour arrêter l'environnement :**
     Appuyez sur `Ctrl + C` dans le terminal, puis exécutez la commande suivante pour arrêter et supprimer les conteneurs.
@@ -65,6 +69,23 @@ L'intégralité de l'environnement de développement est gérée par Docker Comp
     ```bash
     docker-compose down
     ```
+
+## Documentation de l'API (Swagger UI)
+
+Ce projet intègre **springdoc-openapi** pour générer automatiquement une documentation d'API interactive et à jour.
+
+Une fois l'application démarrée, vous pouvez accéder à l'interface Swagger UI pour :
+
+- Voir tous les endpoints disponibles, groupés par tags.
+- Consulter les détails de chaque endpoint (méthode HTTP, description, paramètres).
+- Visualiser les modèles de données (DTOs) attendus en entrée et en sortie.
+- **Exécuter des requêtes directement depuis votre navigateur** pour tester l'API.
+
+**URL d'accès à la documentation :**
+
+### [http://localhost:8080/swagger-ui.html](https://www.google.com/search?q=http://localhost:8080/swagger-ui.html)
+
+Le fichier de spécification OpenAPI 3 brut est également disponible à l'adresse `http://localhost:8080/v3/api-docs`.
 
 ## Architecture du Projet
 
@@ -84,8 +105,6 @@ Ce pipeline garantit que :
 
 1.  Le projet compile correctement.
 2.  Tous les tests unitaires et d'intégration (`./gradlew test`) passent avec succès.
-
-Cela assure qu'aucun code défectueux n'est intégré à la base de code principale.
 
 ## Roadmap du MVP
 

@@ -5,13 +5,14 @@ package com.geekersjoel237.weline.iam.application.command.register;
  *
  * @author Geekers_Joel237
  **/
-public record RegisterCommandResponse(boolean isCreated) {
+public record RegisterCommandResponse(boolean isCreated, String message) {
 
     public static RegisterCommandResponse ofSuccess() {
-        return new RegisterCommandResponse(true);
+        return new RegisterCommandResponse(true, "Customer Created Successfully !");
     }
 
-    public static RegisterCommandResponse ofFailure() {
-        return new RegisterCommandResponse(false);
+
+    public static RegisterCommandResponse ofFailure(String message) {
+        return new RegisterCommandResponse(false, message);
     }
 }
