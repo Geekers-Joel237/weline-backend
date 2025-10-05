@@ -28,8 +28,8 @@ public class ServicePoint {
         return new ServicePoint(id, name, location);
     }
 
-    public Service addService(Id serviceId, Id queueId, String name, String description) { // <-- Change le retour de void à Service
-        var service = Service.create(serviceId, queueId, name, description);
+    public Service addService(Id serviceId, Id queueId, String name, String description, String code) {
+        var service = Service.create(serviceId, queueId, name, description, code);
         this.services.add(service);
         return service;
     }

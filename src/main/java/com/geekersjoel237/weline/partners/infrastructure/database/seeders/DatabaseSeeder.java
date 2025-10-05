@@ -43,13 +43,15 @@ public class DatabaseSeeder implements CommandLineRunner {
                     Id.generate(),
                     Id.generate(),
                     "Paiement Facture",
-                    "Payer vos factures d'électricité."
+                    "Payer vos factures d'électricité.",
+                    "PAY-F"
             );
             agenceDeido.addService(
                     Id.generate(),
                     Id.generate(),
                     "Nouveau Compteur",
-                    "Demander un nouveau compteur ou un abonnement."
+                    "Demander un nouveau compteur ou un abonnement.",
+                    "CMP-N"
             );
 
             partnerRepository.addMany(List.of(eneo.snapshot()));

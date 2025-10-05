@@ -14,20 +14,23 @@ public class Service {
     private final Id queueId;
     private final String name;
     private final String description;
+    private final String code;
 
-    public Service(Id serviceId, Id queueId, String name, String description) {
+    public Service(Id serviceId, Id queueId, String name, String description, String code) {
         this.id = serviceId;
         this.queueId = queueId;
         this.name = Objects.requireNonNull(name, "Service name cannot be null");
         this.description = Objects.requireNonNull(description, "Service description cannot be null");
+        this.code = Objects.requireNonNull(code, "Service code should not be null");
     }
 
-    public static Service create(Id serviceId, Id queueId, String name, String description) {
+    public static Service create(Id serviceId, Id queueId, String name, String description, String code) {
         return new Service(
                 serviceId,
                 queueId,
                 name,
-                description
+                description,
+                code
         );
     }
 
@@ -36,7 +39,8 @@ public class Service {
                 id.value(),
                 queueId.value(),
                 name,
-                description
+                description,
+                code
         );
     }
 
@@ -44,7 +48,8 @@ public class Service {
             String id,
             String queueId,
             String name,
-            String description
+            String description,
+            String code
     ) {
     }
 }
