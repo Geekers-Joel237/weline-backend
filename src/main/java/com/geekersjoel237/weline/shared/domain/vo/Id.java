@@ -22,7 +22,7 @@ public class Id {
         return new Id(value.trim());
     }
 
-    public static Id generated() {
+    public static Id generate() {
         return new Id(java.util.UUID.randomUUID().toString());
     }
 

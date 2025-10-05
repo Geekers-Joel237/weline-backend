@@ -1,4 +1,4 @@
-package com.geekersjoel237.weline.iam.infrastructure.web.dto;
+package com.geekersjoel237.weline.iam.infrastructure.web.requests;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;

@@ -22,7 +22,7 @@ public class CustomerOtp {
 
     public static CustomerOtp create(String customerId, Otp otp) throws CustomIllegalArgumentException {
         return new CustomerOtp(
-                Id.generated(),
+                Id.generate(),
                 Id.of(customerId),
                 otp
         );

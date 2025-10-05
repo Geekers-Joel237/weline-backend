@@ -10,9 +10,9 @@ import com.geekersjoel237.weline.iam.application.command.validateOtp.ValidateOtp
 import com.geekersjoel237.weline.iam.application.command.validateOtp.ValidateOtpHandler;
 import com.geekersjoel237.weline.iam.application.command.validateOtp.ValidateOtpResponse;
 import com.geekersjoel237.weline.iam.infrastructure.web.api.RegistrationApi;
-import com.geekersjoel237.weline.iam.infrastructure.web.dto.LoginRequestDto;
-import com.geekersjoel237.weline.iam.infrastructure.web.dto.RegistrationRequestDto;
-import com.geekersjoel237.weline.iam.infrastructure.web.dto.VerifyOtpRequestDto;
+import com.geekersjoel237.weline.iam.infrastructure.web.requests.LoginRequestDto;
+import com.geekersjoel237.weline.iam.infrastructure.web.requests.RegistrationRequestDto;
+import com.geekersjoel237.weline.iam.infrastructure.web.requests.VerifyOtpRequestDto;
 import com.geekersjoel237.weline.shared.infrastructure.web.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
