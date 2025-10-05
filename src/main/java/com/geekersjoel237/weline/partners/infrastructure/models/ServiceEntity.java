@@ -27,7 +27,7 @@ public class ServiceEntity extends BaseEntity {
 
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_point_id")
     private ServicePointEntity servicePoint;
 

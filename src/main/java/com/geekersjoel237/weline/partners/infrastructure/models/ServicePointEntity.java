@@ -26,7 +26,7 @@ public class ServicePointEntity extends BaseEntity {
     @Column(nullable = false)
     String location;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "partner_id")
     @Setter
     private PartnerEntity partner;
