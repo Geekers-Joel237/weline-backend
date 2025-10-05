@@ -1,6 +1,8 @@
 package com.geekersjoel237.weline.partners.infrastructure.models;
 
 import com.geekersjoel237.weline.partners.domain.entities.Service;
+import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
+import com.geekersjoel237.weline.shared.domain.vo.Id;
 import com.geekersjoel237.weline.shared.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,6 +26,8 @@ public class ServiceEntity extends BaseEntity {
     private String name;
     @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
+    private String code;
 
 
     @Setter
@@ -31,11 +35,12 @@ public class ServiceEntity extends BaseEntity {
     @JoinColumn(name = "service_point_id")
     private ServicePointEntity servicePoint;
 
-    public ServiceEntity(String id, String queueId, String name, String description) {
+    public ServiceEntity(String id, String queueId, String name, String description, String code) {
         this.setId(id);
         this.queueId = queueId;
         this.name = name;
         this.description = description;
+        this.code = code;
     }
 
 
@@ -44,7 +49,22 @@ public class ServiceEntity extends BaseEntity {
                 service.id(),
                 service.queueId(),
                 service.name(),
-                service.description()
+                service.description(),
+                service.code()
         );
+    }
+
+    public Service toDomain() {
+        try {
+            return Service.create(
+                    Id.of(getId()),
+                    Id.of(queueId),
+                    name,
+                    description,
+                    code
+            );
+        } catch (CustomIllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

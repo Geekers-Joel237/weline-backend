@@ -15,4 +15,7 @@ public record TakeTicketResponse(
     }
 
 
+    public static TakeTicketResponse ofFailure(String message) {
+        return new TakeTicketResponse(null, null, false);
+    }
 }

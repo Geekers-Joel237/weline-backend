@@ -54,7 +54,7 @@ public class InMemoryQueueRepository implements QueueRepository {
     }
 
     @Override
-    public void update(Queue.Snapshot queue) throws ErrorOnPersistEntityException {
+    public void save(Queue.Snapshot queue) throws ErrorOnPersistEntityException {
         queues.put(queue.id(), queue);
     }
 }

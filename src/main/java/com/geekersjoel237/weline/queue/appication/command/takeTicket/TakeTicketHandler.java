@@ -1,10 +1,12 @@
 package com.geekersjoel237.weline.queue.appication.command.takeTicket;
 
 import com.geekersjoel237.weline.partners.domain.repositories.ServiceRepository;
+import com.geekersjoel237.weline.queue.domain.entities.Ticket;
 import com.geekersjoel237.weline.queue.domain.repositories.QueueRepository;
 import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
 import com.geekersjoel237.weline.shared.domain.exceptions.NotFoundEntityException;
 import com.geekersjoel237.weline.shared.domain.vo.Id;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Geekers_Joel237
  **/
 
+@Service
 public class TakeTicketHandler {
     private final QueueRepository queueRepository;
     private final ServiceRepository serviceRepository;
@@ -20,13 +23,13 @@ public class TakeTicketHandler {
     public TakeTicketHandler(
             QueueRepository queueRepository,
             ServiceRepository serviceRepository
-            ) {
+    ) {
         this.queueRepository = queueRepository;
         this.serviceRepository = serviceRepository;
     }
 
     @Transactional
-    public TakeTicketResponse handle(TakeTicketCommand command) throws CustomIllegalArgumentException {
+    public TakeTicketResponse handle(TakeTicketCommand command) {
         var queue = queueRepository.ofId(command.queueId()).orElseThrow(
                 () -> new NotFoundEntityException("Queue with id " + command.queueId() + " not found.")
         );
@@ -35,8 +38,13 @@ public class TakeTicketHandler {
                 () -> new NotFoundEntityException("Service with id " + queue.snapshot().serviceId() + " not found.")
         );
 
-        var ticket = queue.takeTicket(Id.of(command.customerId()), service.snapshot().code());
-        queueRepository.update(queue.snapshot());
+        Ticket ticket;
+        try {
+            ticket = queue.takeTicket(Id.of(command.customerId()), service.snapshot().code());
+        } catch (CustomIllegalArgumentException e) {
+            return TakeTicketResponse.ofFailure(e.getMessage());
+        }
+        queueRepository.save(queue.snapshot());
 
         return TakeTicketResponse.ofSuccess(ticket.snapshot().id(), ticket.snapshot().number());
     }

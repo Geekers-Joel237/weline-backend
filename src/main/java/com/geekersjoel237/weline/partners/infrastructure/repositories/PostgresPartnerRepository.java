@@ -17,10 +17,10 @@ import java.util.List;
  **/
 
 @Repository
-public class PosgresPartnerRepository implements PartnerRepository {
+public class PostgresPartnerRepository implements PartnerRepository {
     private final JpaPartnerRepository jpaPartnerRepository;
 
-    public PosgresPartnerRepository(JpaPartnerRepository jpaPartnerRepository) {
+    public PostgresPartnerRepository(JpaPartnerRepository jpaPartnerRepository) {
         this.jpaPartnerRepository = jpaPartnerRepository;
     }
 

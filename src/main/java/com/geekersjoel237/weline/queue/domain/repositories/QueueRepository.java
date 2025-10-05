@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface QueueRepository {
     Optional<Queue> ofId(String queueId);
 
-    void update(Queue.Snapshot queue) throws ErrorOnPersistEntityException;
+    void save(Queue.Snapshot queue) throws ErrorOnPersistEntityException;
 }
