@@ -6,7 +6,7 @@ services:
     build: . # Construit l'image à partir du Dockerfile local
     container_name: weline_backend
     ports:
-      - "8081:8080" # Expose le port de l'app sur la machine hôte
+      - "8088:8080" # Expose le port de l'app sur la machine hôte
     environment:
       # On configure l'app pour qu'elle se connecte aux autres conteneurs
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/weline_db

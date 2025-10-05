@@ -29,7 +29,7 @@ public class CustomerEntity extends BaseEntity {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private CustomerStatusEnum status;
 
 

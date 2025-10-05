@@ -40,6 +40,11 @@ public class RegisterCustomerHandler {
 
         try {
             phoneNumber = new PhoneNumber(command.phoneNumber());
+
+            if (customerRepository.ofPhoneNumber(phoneNumber.value()).isPresent()) {
+                return RegisterCommandResponse.ofFailure("Phone number already exists");
+            }
+
             customer = Customer.create(
                     command.customerId(),
                     phoneNumber
