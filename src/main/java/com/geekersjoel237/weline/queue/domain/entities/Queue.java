@@ -4,6 +4,9 @@ import com.geekersjoel237.weline.queue.domain.vo.TicketCode;
 import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
 import com.geekersjoel237.weline.shared.domain.vo.Id;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created on 05/10/2025
  *
@@ -13,12 +16,14 @@ public class Queue {
     public static final int INITIAL_TICKET_NUMBER = 0;
     private final Id id;
     private final Id serviceId;
+    private List<Ticket> waitingTickets;
     private int lastTicketNumber;
 
     private Queue(Id id, Id serviceId, int lastTicketNumber) {
         this.id = id;
         this.serviceId = serviceId;
         this.lastTicketNumber = lastTicketNumber;
+        waitingTickets = new LinkedList<>();
     }
 
     public static Queue create(Id id, Id serviceId) {
@@ -29,22 +34,41 @@ public class Queue {
         );
     }
 
+    public static Queue createFromAdapter(Id queueId, Id serviceId, int lastTicketNumber, List<Ticket> tickets) {
+        var queue = new Queue(queueId, serviceId, lastTicketNumber);
+        queue.waitingTickets = tickets;
+        return queue;
+    }
+
     public Ticket takeTicket(Id customerId, String prefix) throws CustomIllegalArgumentException {
         ++lastTicketNumber;
-        return Ticket.create(
-                customerId,
-                id,
-                TicketCode.of(prefix, lastTicketNumber)
-        );
+        waitingTickets.add(
+                Ticket.create(
+                        customerId,
+                        id,
+                        TicketCode.of(prefix, lastTicketNumber)
+                ));
+        return waitingTickets.getLast();
     }
 
     public Snapshot snapshot() {
-        return new Snapshot(id.value(), serviceId.value());
+        return new Snapshot(
+                id.value(),
+                serviceId.value(),
+                lastTicketNumber,
+                waitingTickets.stream().map(Ticket::snapshot).toList()
+        );
+    }
+
+    public Ticket currentTicket() {
+        return waitingTickets.getLast();
     }
 
     public record Snapshot(
             String id,
-            String serviceId
+            String serviceId,
+            int lastTicketNumber,
+            List<Ticket.Snapshot> tickets
     ) {
     }
 }

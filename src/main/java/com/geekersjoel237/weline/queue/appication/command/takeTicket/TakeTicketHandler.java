@@ -5,21 +5,27 @@ import com.geekersjoel237.weline.queue.domain.repositories.QueueRepository;
 import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
 import com.geekersjoel237.weline.shared.domain.exceptions.NotFoundEntityException;
 import com.geekersjoel237.weline.shared.domain.vo.Id;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created on 05/10/2025
  *
  * @author Geekers_Joel237
  **/
+
 public class TakeTicketHandler {
     private final QueueRepository queueRepository;
     private final ServiceRepository serviceRepository;
 
-    public TakeTicketHandler(QueueRepository queueRepository, ServiceRepository serviceRepository) {
+    public TakeTicketHandler(
+            QueueRepository queueRepository,
+            ServiceRepository serviceRepository
+            ) {
         this.queueRepository = queueRepository;
         this.serviceRepository = serviceRepository;
     }
 
+    @Transactional
     public TakeTicketResponse handle(TakeTicketCommand command) throws CustomIllegalArgumentException {
         var queue = queueRepository.ofId(command.queueId()).orElseThrow(
                 () -> new NotFoundEntityException("Queue with id " + command.queueId() + " not found.")
@@ -30,6 +36,8 @@ public class TakeTicketHandler {
         );
 
         var ticket = queue.takeTicket(Id.of(command.customerId()), service.snapshot().code());
+        queueRepository.update(queue.snapshot());
+
         return TakeTicketResponse.ofSuccess(ticket.snapshot().id(), ticket.snapshot().number());
     }
 }

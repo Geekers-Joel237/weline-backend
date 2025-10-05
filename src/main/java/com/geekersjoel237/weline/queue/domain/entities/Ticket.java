@@ -3,6 +3,8 @@ package com.geekersjoel237.weline.queue.domain.entities;
 import com.geekersjoel237.weline.queue.domain.vo.TicketCode;
 import com.geekersjoel237.weline.shared.domain.vo.Id;
 
+import java.time.Instant;
+
 /**
  * Created on 05/10/2025
  *
@@ -13,12 +15,14 @@ public class Ticket {
     private final Id queueId;
     private final Id customerId;
     private final TicketCode number;
+    private final Instant createdAt;
 
-    private Ticket(Id id, Id queueId, Id customerId, TicketCode number) {
+    private Ticket(Id id, Id queueId, Id customerId, TicketCode number, Instant createdAt) {
         this.id = id;
         this.queueId = queueId;
         this.customerId = customerId;
         this.number = number;
+        this.createdAt = createdAt;
     }
 
     public static Ticket create(Id customerId, Id queueId, TicketCode code) {
@@ -26,8 +30,15 @@ public class Ticket {
                 Id.generate(),
                 queueId,
                 customerId,
-                code
+                code,
+                Instant.now()
         );
+    }
+
+    public static Ticket createFromAdapter(
+            Id ticketId, Id queueId, Id customerId, TicketCode ticketCode, Instant createdAt
+    ) {
+        return new Ticket(ticketId, queueId, customerId, ticketCode, createdAt);
     }
 
     public Snapshot snapshot() {
@@ -35,7 +46,8 @@ public class Ticket {
                 id.value(),
                 queueId.value(),
                 customerId.value(),
-                number.value()
+                number.value(),
+                createdAt
         );
     }
 
@@ -43,7 +55,8 @@ public class Ticket {
             String id,
             String queueId,
             String customerId,
-            String number
+            String number,
+            Instant createdAt
     ) {
     }
 
