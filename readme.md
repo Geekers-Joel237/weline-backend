@@ -1,15 +1,3 @@
-Excellente idée. C'est une étape essentielle. Le `README.md` doit toujours refléter l'état actuel du projet et fournir les informations les plus utiles aux développeurs. L'ajout de Swagger UI est une information capitale.
-
-Nous allons mettre à jour le `README.md` pour inclure la documentation de l'API.
-
------
-
-Voici la version complète et mise à jour de votre fichier `README.md`. Les sections modifiées sont principalement "Stack Technique" et une nouvelle section "Documentation de l'API (Swagger UI)" qui remplace l'ancienne section "Endpoints Clés".
-
-**Action :** Remplacez le contenu de votre `README.md` par le texte ci-dessous.
-
------
-
 # Weline - Service Backend
 
 Le service backend pour Weline, une plateforme de gestion de files d'attente virtuelles et un futur assistant de démarches, conçu pour le contexte camerounais. Ce projet est construit avec une philosophie privilégiant la robustesse, la scalabilité et les meilleures pratiques de développement (DDD, TDD) dès le départ.
