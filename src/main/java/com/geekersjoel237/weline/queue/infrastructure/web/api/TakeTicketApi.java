@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -37,7 +38,8 @@ public interface TakeTicketApi {
 
     @PostMapping("/{queueId}/tickets")
     ResponseEntity<ApiResponse<TakeTicketResponse>> takeTicket(
-            @Parameter(description = "ID de la file d'attente pour laquelle prendre un ticket", required = true) String queueId,
+            @Parameter(description = "ID de la file d'attente pour laquelle prendre un ticket", required = true)
+            @PathVariable String queueId,
             Authentication authentication
     );
 }

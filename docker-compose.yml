@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Notre application Spring Boot
   backend:
@@ -16,8 +14,10 @@ services:
     depends_on:
       - postgres_db
       - redis_cache
+    networks:
+      - weline-network
 
-  # La base de données PostgreSQL
+      # La base de données PostgreSQL
   postgres_db:
     image: postgres:16-alpine
     container_name: postgres_db
@@ -29,13 +29,26 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432" # Optionnel : pour se connecter à la DB depuis la machine locale
+    networks:
+      - weline-network
 
   # Le cache Redis
   redis_cache:
     image: redis:7-alpine
     container_name: redis_cache
+    restart: always
     ports:
-      - "6379:6379" # Optionnel : pour inspecter le cache
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - weline-network
+
+
+networks:
+  weline-network:
+    driver: bridge
 
 volumes:
-  postgres_data: # Assure la persistance des données de la base
+  postgres_data:
+  redis_data:

@@ -41,7 +41,7 @@ public class QueueEntity extends BaseEntity {
                 queue.serviceId(),
                 queue.lastTicketNumber()
         );
-        queue.tickets().forEach(ticket -> entity.addWaitingTicket(TicketEntity.fromDomain(ticket)));
+        queue.waitingTickets().forEach(ticket -> entity.addWaitingTicket(TicketEntity.fromDomain(ticket)));
         return entity;
     }
 

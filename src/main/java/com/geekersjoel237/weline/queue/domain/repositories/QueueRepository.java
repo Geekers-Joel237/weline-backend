@@ -3,6 +3,7 @@ package com.geekersjoel237.weline.queue.domain.repositories;
 import com.geekersjoel237.weline.queue.domain.entities.Queue;
 import com.geekersjoel237.weline.shared.domain.exceptions.ErrorOnPersistEntityException;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,4 +15,6 @@ public interface QueueRepository {
     Optional<Queue> ofId(String queueId);
 
     void save(Queue.Snapshot queue) throws ErrorOnPersistEntityException;
+
+    void addMany(List<Queue.Snapshot> queues) throws ErrorOnPersistEntityException;
 }

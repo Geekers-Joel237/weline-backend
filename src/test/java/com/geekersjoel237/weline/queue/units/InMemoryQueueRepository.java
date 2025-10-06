@@ -9,6 +9,7 @@ import com.geekersjoel237.weline.shared.domain.exceptions.ErrorOnPersistEntityEx
 import com.geekersjoel237.weline.shared.domain.vo.Id;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class InMemoryQueueRepository implements QueueRepository {
                     Id.of(snapshot.id()),
                     Id.of(snapshot.serviceId()),
                     snapshot.lastTicketNumber(),
-                    snapshot.tickets().stream().map(t -> {
+                    snapshot.waitingTickets().stream().map(t -> {
                         try {
                             return Ticket.createFromAdapter(
                                     Id.of(t.id()),
@@ -56,5 +57,10 @@ public class InMemoryQueueRepository implements QueueRepository {
     @Override
     public void save(Queue.Snapshot queue) throws ErrorOnPersistEntityException {
         queues.put(queue.id(), queue);
+    }
+
+    @Override
+    public void addMany(List<Queue.Snapshot> queues) throws ErrorOnPersistEntityException {
+
     }
 }

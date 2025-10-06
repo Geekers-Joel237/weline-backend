@@ -102,7 +102,7 @@ public class TakeTicketTest {
         var foundTicket = foundTicketOpt.get().currentTicket();
         assert res.ticketId().equals(foundTicket.snapshot().id());
         assert 2 == queueRepository.ofId(queue.snapshot().id()).get().snapshot().lastTicketNumber();
-        assert 2 == queueRepository.ofId(queue.snapshot().id()).get().snapshot().tickets().size();
+        assert 2 == queueRepository.ofId(queue.snapshot().id()).get().snapshot().waitingTickets().size();
     }
 
     private TakeTicketResponse takeTicket(TakeTicketCommand command1) throws CustomIllegalArgumentException {

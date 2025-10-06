@@ -18,7 +18,7 @@ import java.time.Instant;
  **/
 
 @Entity
-@Table(name = "tickets", indexes = {
+@Table(name = "waitingTickets", indexes = {
         @jakarta.persistence.Index(columnList = "customer_id"),
         @jakarta.persistence.Index(columnList = "number", unique = true)
 })

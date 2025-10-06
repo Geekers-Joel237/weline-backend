@@ -41,6 +41,7 @@ public class Queue {
     }
 
     public Ticket takeTicket(Id customerId, String prefix) throws CustomIllegalArgumentException {
+        checkIfCustomerHasTicket(customerId);
         ++lastTicketNumber;
         waitingTickets.add(
                 Ticket.create(
@@ -49,6 +50,12 @@ public class Queue {
                         TicketCode.of(prefix, lastTicketNumber)
                 ));
         return waitingTickets.getLast();
+    }
+
+    private void checkIfCustomerHasTicket(Id customerId) {
+        if (waitingTickets.stream().anyMatch(t -> t.snapshot().customerId().equals(customerId.value()))) {
+            //TODO: manage same customer want another ticket
+        }
     }
 
     public Snapshot snapshot() {
@@ -64,11 +71,27 @@ public class Queue {
         return waitingTickets.getLast();
     }
 
+    public QueueStatus getStatusForTicket(Id ticketId) {
+        String currentTicketNumber = (currentTicket() != null)
+                ? currentTicket().snapshot().number()
+                : "---";
+
+        long peopleBeforeYou = waitingTickets.stream()
+                .takeWhile(ticket -> !ticket.snapshot().id().equals(ticketId.value()))
+                .count();
+
+        return new QueueStatus(currentTicketNumber, peopleBeforeYou);
+    }
+
     public record Snapshot(
             String id,
             String serviceId,
             int lastTicketNumber,
-            List<Ticket.Snapshot> tickets
+            List<Ticket.Snapshot> waitingTickets
     ) {
     }
+
+    public record QueueStatus(String currentTicketNumber, long peopleBeforeYou) {
+    }
+
 }

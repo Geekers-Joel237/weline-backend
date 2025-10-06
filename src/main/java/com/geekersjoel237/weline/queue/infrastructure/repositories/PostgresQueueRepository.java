@@ -8,6 +8,7 @@ import com.geekersjoel237.weline.shared.domain.exceptions.ErrorOnPersistEntityEx
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,6 +39,19 @@ public class PostgresQueueRepository implements QueueRepository {
             jpaQueueRepository.save(queueEntity);
         } catch (DataAccessException e) {
             throw new ErrorOnPersistEntityException("Error on saving queue: " + e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void addMany(List<Queue.Snapshot> queues) throws ErrorOnPersistEntityException {
+        try {
+            var queueEntities = queues.stream()
+                    .map(QueueEntity::fromDomain)
+                    .toList();
+            jpaQueueRepository.saveAll(queueEntities);
+        } catch (DataAccessException e) {
+            throw new ErrorOnPersistEntityException("Error on saving multiple queues: " + e.getMessage());
         }
 
     }
