@@ -17,7 +17,7 @@ public class Ticket {
     private final Id customerId;
     private final TicketCode number;
     private final Instant createdAt;
-    private final StatusEnum status;
+    private StatusEnum status;
 
     private Ticket(Id id, Id queueId, Id customerId, TicketCode number, Instant createdAt, StatusEnum status) {
         this.id = id;
@@ -54,6 +54,20 @@ public class Ticket {
                 createdAt,
                 status.name()
         );
+    }
+
+    public void markCurrent() throws CustomIllegalArgumentException {
+        if (!StatusEnum.PENDING.equals(status)) {
+            throw new CustomIllegalArgumentException("Only pending tickets can be mark as current !");
+        }
+        status = StatusEnum.CURRENT;
+    }
+
+    public void archive() throws CustomIllegalArgumentException {
+        if (!StatusEnum.CURRENT.equals(status)) {
+            throw new CustomIllegalArgumentException("Only current tickets can be archived !");
+        }
+        status = StatusEnum.ARCHIVED;
     }
 
     public enum StatusEnum {

@@ -14,6 +14,7 @@ import java.util.List;
  **/
 public class Queue {
     public static final int INITIAL_TICKET_NUMBER = 0;
+    public static final String RAS_SYMBOL = "---";
     private final Id id;
     private final Id serviceId;
     private List<Ticket> waitingTickets;
@@ -74,13 +75,17 @@ public class Queue {
     public QueueStatus getStatusForTicket(Id ticketId) {
         String lastDeliveredTicketNumber = (lastTicket() != null)
                 ? lastTicket().snapshot().number()
-                : "---";
+                : RAS_SYMBOL;
 
         long peopleBeforeYou = waitingTickets.stream()
                 .takeWhile(ticket -> !ticket.snapshot().id().equals(ticketId.value()))
                 .count();
 
-        return new QueueStatus(lastDeliveredTicketNumber, peopleBeforeYou);
+        var currentTicketNumber = currentTicket() != null ?
+                currentTicket().snapshot().number() :
+                RAS_SYMBOL;
+
+        return new QueueStatus(lastDeliveredTicketNumber, peopleBeforeYou, currentTicketNumber);
     }
 
     public Ticket currentTicket() {
@@ -88,6 +93,43 @@ public class Queue {
                 .filter(t -> Ticket.StatusEnum.CURRENT.name().equals(t.snapshot().status()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public ProcessTicketResultSet process(Ticket ticket) {
+        var previousTicket = currentTicket();
+        try {
+            if (previousTicket != null) {
+                previousTicket.archive();
+            }
+            ticket.markCurrent();
+        } catch (CustomIllegalArgumentException e) {
+            var nextTicket = this.callNextTicket();
+            return ProcessTicketResultSet.ofFailure(previousTicket, nextTicket);
+        }
+
+        var nextTicket = this.callNextTicket();
+        return ProcessTicketResultSet.ofSuccess(previousTicket, ticket, nextTicket);
+    }
+
+    private Ticket callNextTicket() {
+        waitingTickets.remove(currentTicket());
+        return waitingTickets.getFirst();
+        //TODO: gerer cas file d'attente vide
+    }
+
+    public record ProcessTicketResultSet(
+            boolean isSuccess,
+            Ticket previousTicket,
+            Ticket currentTicket,
+            Ticket nextTicket) {
+
+        public static ProcessTicketResultSet ofSuccess(Ticket previousTicket, Ticket currentTicket, Ticket nextTicket) {
+            return new ProcessTicketResultSet(true, previousTicket, currentTicket, nextTicket);
+        }
+
+        public static ProcessTicketResultSet ofFailure(Ticket previousTicket, Ticket nextTicket) {
+            return new ProcessTicketResultSet(false, previousTicket, null, nextTicket);
+        }
     }
 
     public record Snapshot(
@@ -98,7 +140,7 @@ public class Queue {
     ) {
     }
 
-    public record QueueStatus(String lastDeliveredTicketNumber, long peopleBeforeYou) {
+    public record QueueStatus(String lastDeliveredTicketNumber, long peopleBeforeYou, String currentTicketNumber) {
     }
 
 }

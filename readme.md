@@ -48,7 +48,7 @@ L'intégralité de l'environnement de développement est gérée par Docker Comp
 3.  **Vérifiez que tout fonctionne :**
     Une fois le démarrage terminé, vous devriez voir les logs des trois services dans votre terminal.
 
-    * **Test de santé rapide :** Ouvrez votre navigateur et allez sur [http://localhost:8080/actuator/health](https://www.google.com/search?q=http://localhost:8080/actuator/health). Vous devriez voir `{"status":"UP"}`.
+    * **Test de santé rapide :** Ouvrez votre navigateur et allez sur [http://localhost:8088/actuator/health](https://www.google.com/search?q=http://localhost:8088/actuator/health). Vous devriez voir `{"status":"UP"}`.
     * **Explorez l'API :** La meilleure façon de vérifier que tout est fonctionnel est d'utiliser la documentation interactive. Voir la section ci-dessous.
 
 4.  **Pour arrêter l'environnement :**
@@ -71,9 +71,9 @@ Une fois l'application démarrée, vous pouvez accéder à l'interface Swagger U
 
 **URL d'accès à la documentation :**
 
-### [http://localhost:8080/swagger-ui.html](https://www.google.com/search?q=http://localhost:8080/swagger-ui.html)
+### [http://localhost:8088/swagger-ui.html](https://www.google.com/search?q=http://localhost:8088/swagger-ui.html)
 
-Le fichier de spécification OpenAPI 3 brut est également disponible à l'adresse `http://localhost:8080/v3/api-docs`.
+Le fichier de spécification OpenAPI 3 brut est également disponible à l'adresse `http://localhost:8088/v3/api-docs`.
 
 ## Architecture du Projet
 
