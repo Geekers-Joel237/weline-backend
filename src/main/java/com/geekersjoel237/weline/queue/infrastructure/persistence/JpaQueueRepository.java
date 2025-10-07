@@ -3,6 +3,7 @@ package com.geekersjoel237.weline.queue.infrastructure.persistence;
 import com.geekersjoel237.weline.queue.infrastructure.models.QueueEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -17,5 +18,5 @@ public interface JpaQueueRepository extends JpaRepository<QueueEntity, String> {
             LEFT JOIN FETCH q.tickets t
             WHERE q.id = :queueId
             """)
-    Optional<QueueEntity> findByIdWithTickets(String queueId);
+    Optional<QueueEntity> findByIdWithTickets(@Param("queueId") String queueId);
 }

@@ -67,20 +67,27 @@ public class Queue {
         );
     }
 
-    public Ticket currentTicket() {
+    public Ticket lastTicket() {
         return waitingTickets.getLast();
     }
 
     public QueueStatus getStatusForTicket(Id ticketId) {
-        String currentTicketNumber = (currentTicket() != null)
-                ? currentTicket().snapshot().number()
+        String lastDeliveredTicketNumber = (lastTicket() != null)
+                ? lastTicket().snapshot().number()
                 : "---";
 
         long peopleBeforeYou = waitingTickets.stream()
                 .takeWhile(ticket -> !ticket.snapshot().id().equals(ticketId.value()))
                 .count();
 
-        return new QueueStatus(currentTicketNumber, peopleBeforeYou);
+        return new QueueStatus(lastDeliveredTicketNumber, peopleBeforeYou);
+    }
+
+    public Ticket currentTicket() {
+        return waitingTickets.stream()
+                .filter(t -> Ticket.StatusEnum.CURRENT.name().equals(t.snapshot().status()))
+                .findFirst()
+                .orElse(null);
     }
 
     public record Snapshot(
@@ -91,7 +98,7 @@ public class Queue {
     ) {
     }
 
-    public record QueueStatus(String currentTicketNumber, long peopleBeforeYou) {
+    public record QueueStatus(String lastDeliveredTicketNumber, long peopleBeforeYou) {
     }
 
 }

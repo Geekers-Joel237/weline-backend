@@ -36,7 +36,8 @@ public class InMemoryQueueRepository implements QueueRepository {
                                     Id.of(t.queueId()),
                                     Id.of(t.customerId()),
                                     new TicketCode(t.number()),
-                                    t.createdAt()
+                                    t.createdAt(),
+                                    Ticket.StatusEnum.valueOf(t.status())
                             );
                         } catch (CustomIllegalArgumentException e) {
                             throw new RuntimeException(e);

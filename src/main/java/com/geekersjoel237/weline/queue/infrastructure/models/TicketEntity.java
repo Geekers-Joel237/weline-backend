@@ -18,7 +18,7 @@ import java.time.Instant;
  **/
 
 @Entity
-@Table(name = "waitingTickets", indexes = {
+@Table(name = "tickets", indexes = {
         @jakarta.persistence.Index(columnList = "customer_id"),
         @jakarta.persistence.Index(columnList = "number", unique = true)
 })
@@ -28,6 +28,8 @@ public class TicketEntity extends BaseEntity {
     private String customerId;
     @Column(nullable = false)
     private String number;
+    @Column(nullable = false)
+    private String status;
 
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
@@ -35,11 +37,12 @@ public class TicketEntity extends BaseEntity {
     private QueueEntity queue;
 
 
-    public TicketEntity(String id, String customerId, String number, Instant createdAt) {
+    public TicketEntity(String id, String customerId, String number, Instant createdAt, String status) {
         this.setId(id);
         this.customerId = customerId;
         this.number = number;
         this.setCreatedAt(createdAt);
+        this.status = status;
     }
 
     public static TicketEntity fromDomain(Ticket.Snapshot ticket) {
@@ -47,7 +50,8 @@ public class TicketEntity extends BaseEntity {
                 ticket.id(),
                 ticket.customerId(),
                 ticket.number(),
-                ticket.createdAt()
+                ticket.createdAt(),
+                ticket.status()
         );
     }
 
@@ -58,7 +62,8 @@ public class TicketEntity extends BaseEntity {
                     Id.of(queue.getId()),
                     Id.of(customerId),
                     new TicketCode(number),
-                    getCreatedAt()
+                    getCreatedAt(),
+                    Ticket.StatusEnum.valueOf(status)
             );
         } catch (CustomIllegalArgumentException e) {
             throw new RuntimeException(e);

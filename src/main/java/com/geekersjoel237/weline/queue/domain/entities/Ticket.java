@@ -1,6 +1,7 @@
 package com.geekersjoel237.weline.queue.domain.entities;
 
 import com.geekersjoel237.weline.queue.domain.vo.TicketCode;
+import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
 import com.geekersjoel237.weline.shared.domain.vo.Id;
 
 import java.time.Instant;
@@ -16,13 +17,15 @@ public class Ticket {
     private final Id customerId;
     private final TicketCode number;
     private final Instant createdAt;
+    private final StatusEnum status;
 
-    private Ticket(Id id, Id queueId, Id customerId, TicketCode number, Instant createdAt) {
+    private Ticket(Id id, Id queueId, Id customerId, TicketCode number, Instant createdAt, StatusEnum status) {
         this.id = id;
         this.queueId = queueId;
         this.customerId = customerId;
         this.number = number;
         this.createdAt = createdAt;
+        this.status = status;
     }
 
     public static Ticket create(Id customerId, Id queueId, TicketCode code) {
@@ -31,14 +34,15 @@ public class Ticket {
                 queueId,
                 customerId,
                 code,
-                Instant.now()
+                Instant.now(),
+                StatusEnum.PENDING
         );
     }
 
     public static Ticket createFromAdapter(
-            Id ticketId, Id queueId, Id customerId, TicketCode ticketCode, Instant createdAt
+            Id ticketId, Id queueId, Id customerId, TicketCode ticketCode, Instant createdAt, StatusEnum status
     ) {
-        return new Ticket(ticketId, queueId, customerId, ticketCode, createdAt);
+        return new Ticket(ticketId, queueId, customerId, ticketCode, createdAt, status);
     }
 
     public Snapshot snapshot() {
@@ -47,8 +51,25 @@ public class Ticket {
                 queueId.value(),
                 customerId.value(),
                 number.value(),
-                createdAt
+                createdAt,
+                status.name()
         );
+    }
+
+    public enum StatusEnum {
+        PENDING,
+        CURRENT,
+        ARCHIVED,
+        CANCELLED;
+
+        StatusEnum fromValue(String value) throws CustomIllegalArgumentException {
+            for (StatusEnum statusEnum : StatusEnum.values()) {
+                if (statusEnum.name().equalsIgnoreCase(value)) {
+                    return statusEnum;
+                }
+            }
+            throw new CustomIllegalArgumentException("Unknow enum value");
+        }
     }
 
     public record Snapshot(
@@ -56,8 +77,8 @@ public class Ticket {
             String queueId,
             String customerId,
             String number,
-            Instant createdAt
+            Instant createdAt,
+            String status
     ) {
     }
-
 }

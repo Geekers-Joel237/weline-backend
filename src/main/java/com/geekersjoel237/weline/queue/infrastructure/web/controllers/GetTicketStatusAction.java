@@ -1,7 +1,7 @@
 package com.geekersjoel237.weline.queue.infrastructure.web.controllers;
 
-import com.geekersjoel237.weline.queue.appication.query.getStatus.GetTicketStatusQueryHandler;
-import com.geekersjoel237.weline.queue.appication.query.getStatus.TicketStatusResponse;
+import com.geekersjoel237.weline.queue.appication.command.getStatus.GetTicketStatusQueryHandler;
+import com.geekersjoel237.weline.queue.appication.command.getStatus.TicketStatusResponse;
 import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
 import com.geekersjoel237.weline.shared.infrastructure.web.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

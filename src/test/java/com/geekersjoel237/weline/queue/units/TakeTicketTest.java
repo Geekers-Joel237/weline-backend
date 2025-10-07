@@ -59,7 +59,7 @@ public class TakeTicketTest {
         assert res.ticketId() != null;
         assert res.ticketNumber().equals("PAY-F-001");
 
-        var foundTicket = queueRepository.ofId(queue.snapshot().id()).get().currentTicket();
+        var foundTicket = queueRepository.ofId(queue.snapshot().id()).get().lastTicket();
         assert res.ticketId().equals(foundTicket.snapshot().id());
     }
 
@@ -99,7 +99,7 @@ public class TakeTicketTest {
 
         var foundTicketOpt = queueRepository.ofId(queue.snapshot().id());
         assert foundTicketOpt.isPresent();
-        var foundTicket = foundTicketOpt.get().currentTicket();
+        var foundTicket = foundTicketOpt.get().lastTicket();
         assert res.ticketId().equals(foundTicket.snapshot().id());
         assert 2 == queueRepository.ofId(queue.snapshot().id()).get().snapshot().lastTicketNumber();
         assert 2 == queueRepository.ofId(queue.snapshot().id()).get().snapshot().waitingTickets().size();

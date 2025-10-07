@@ -1,4 +1,4 @@
-package com.geekersjoel237.weline.queue.appication.query.getStatus;
+package com.geekersjoel237.weline.queue.appication.command.getStatus;
 
 import com.geekersjoel237.weline.partners.domain.repositories.ServiceRepository;
 import com.geekersjoel237.weline.queue.domain.repositories.QueueRepository;
@@ -43,7 +43,7 @@ public class GetTicketStatusQueryHandler {
 
         return new TicketStatusResponse(
                 ticket.snapshot().number(),
-                queueStatus.currentTicketNumber(),
+                queueStatus.lastDeliveredTicketNumber(),
                 queueStatus.peopleBeforeYou(),
                 service.snapshot().name()
         );
