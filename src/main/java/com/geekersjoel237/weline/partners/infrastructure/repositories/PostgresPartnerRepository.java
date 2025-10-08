@@ -40,7 +40,8 @@ public class PostgresPartnerRepository implements PartnerRepository {
     @Override
     public void update(Partner.Snapshot partner) throws ErrorOnPersistEntityException {
         try {
-            var entity = PartnerEntity.fromDomain(partner);
+            var entity = jpaPartnerRepository.findById(partner.id()).orElseThrow();
+            entity.update(partner.name());
             jpaPartnerRepository.save(entity);
         } catch (DataAccessException e) {
             throw new ErrorOnPersistEntityException("Error on update partner", e);

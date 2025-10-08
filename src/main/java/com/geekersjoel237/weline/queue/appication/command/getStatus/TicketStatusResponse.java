@@ -9,8 +9,8 @@ package com.geekersjoel237.weline.queue.appication.command.getStatus;
 public record TicketStatusResponse(
         String yourTicketNumber,
         String lastDeliveredTicketNumber,
+        String currentTicketNumber,
         long peopleBeforeYou,
         String serviceName
 ) {
-    //TODO: introduce notion of current ticket , agent or service delivery point of view
 }

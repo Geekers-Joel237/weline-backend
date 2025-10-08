@@ -46,4 +46,8 @@ public class PartnerEntity extends BaseEntity {
         this.servicePoints.add(servicePoint);
         servicePoint.setPartner(this);
     }
+
+    public void update(String name) {
+        this.name = name;
+    }
 }

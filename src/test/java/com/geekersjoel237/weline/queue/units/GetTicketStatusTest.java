@@ -49,13 +49,13 @@ public class GetTicketStatusTest {
                 Id.of(service.snapshot().queueId()),
                 Id.of(service.snapshot().id())
         );
-        queueRepository.save(queue.snapshot());
+        queueRepository.add(queue.snapshot());
         var ticket = queue.takeTicket(
                 Id.of("customer-id-123"),
                 service.snapshot().code()
         );
         ((InMemoryTicketRepository) ticketRepository).tickets.put(ticket.snapshot().id(), ticket);
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
         var res = handler.handle(ticket.snapshot().id());
 
@@ -80,20 +80,20 @@ public class GetTicketStatusTest {
                 Id.of(service.snapshot().queueId()),
                 Id.of(service.snapshot().id())
         );
-        queueRepository.save(queue.snapshot());
+        queueRepository.add(queue.snapshot());
         var ticket1 = queue.takeTicket(
                 Id.of("customer-id-123"),
                 service.snapshot().code()
         );
         ((InMemoryTicketRepository) ticketRepository).tickets.put(ticket1.snapshot().id(), ticket1);
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
         var ticket2 = queue.takeTicket(
                 Id.of("customer-id-459"),
                 service.snapshot().code()
         );
         ((InMemoryTicketRepository) ticketRepository).tickets.put(ticket2.snapshot().id(), ticket2);
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
         var res = handler.handle(ticket2.snapshot().id());
 
@@ -118,41 +118,41 @@ public class GetTicketStatusTest {
                 Id.of(service.snapshot().queueId()),
                 Id.of(service.snapshot().id())
         );
-        queueRepository.save(queue.snapshot());
+        queueRepository.add(queue.snapshot());
         var ticket1 = queue.takeTicket(
                 Id.of("customer-id-123"),
                 service.snapshot().code()
         );
         ((InMemoryTicketRepository) ticketRepository).tickets.put(ticket1.snapshot().id(), ticket1);
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
         var ticket2 = queue.takeTicket(
                 Id.of("customer-id-459"),
                 service.snapshot().code()
         );
         ((InMemoryTicketRepository) ticketRepository).tickets.put(ticket2.snapshot().id(), ticket2);
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
         var ticket3 = queue.takeTicket(
                 Id.of("customer-id-789"),
                 service.snapshot().code()
         );
         ((InMemoryTicketRepository) ticketRepository).tickets.put(ticket3.snapshot().id(), ticket3);
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
         var ticket4 = queue.takeTicket(
                 Id.of("customer-id-243"),
                 service.snapshot().code()
         );
         ((InMemoryTicketRepository) ticketRepository).tickets.put(ticket4.snapshot().id(), ticket4);
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
         var ticket5 = queue.takeTicket(
                 Id.of("customer-id-584"),
                 service.snapshot().code()
         );
         ((InMemoryTicketRepository) ticketRepository).tickets.put(ticket5.snapshot().id(), ticket5);
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
 
         var res1 = handler.handle(ticket5.snapshot().id());

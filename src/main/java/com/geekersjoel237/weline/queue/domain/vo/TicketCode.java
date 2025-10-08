@@ -8,7 +8,7 @@ import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentE
  * @author Geekers_Joel237
  **/
 public record TicketCode(String value) {
-
+    //TODO: introduce step for generation algo
     public static TicketCode of(String prefix, int lastTicketNumber) throws CustomIllegalArgumentException {
         if (prefix == null || prefix.isBlank()) {
             throw new CustomIllegalArgumentException("Prefix code cannot be null or empty");

@@ -3,12 +3,15 @@ package com.geekersjoel237.weline.queue.infrastructure.repositories;
 import com.geekersjoel237.weline.queue.domain.entities.Queue;
 import com.geekersjoel237.weline.queue.domain.repositories.QueueRepository;
 import com.geekersjoel237.weline.queue.infrastructure.models.QueueEntity;
+import com.geekersjoel237.weline.queue.infrastructure.models.TicketEntity;
 import com.geekersjoel237.weline.queue.infrastructure.persistence.JpaQueueRepository;
 import com.geekersjoel237.weline.shared.domain.exceptions.ErrorOnPersistEntityException;
+import com.geekersjoel237.weline.shared.domain.exceptions.NotFoundEntityException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -33,15 +36,15 @@ public class PostgresQueueRepository implements QueueRepository {
     }
 
     @Override
-    public void save(Queue.Snapshot queue) throws ErrorOnPersistEntityException {
+    public void add(Queue.Snapshot queue) throws ErrorOnPersistEntityException {
         try {
-            var queueEntity = QueueEntity.fromDomain(queue);
-            jpaQueueRepository.save(queueEntity);
+            var entity = QueueEntity.fromDomain(queue);
+            jpaQueueRepository.save(entity);
         } catch (DataAccessException e) {
-            throw new ErrorOnPersistEntityException("Error on saving queue: " + e.getMessage());
+            throw new ErrorOnPersistEntityException(e.getMessage());
         }
-
     }
+
 
     @Override
     public void addMany(List<Queue.Snapshot> queues) throws ErrorOnPersistEntityException {
@@ -55,4 +58,28 @@ public class PostgresQueueRepository implements QueueRepository {
         }
 
     }
+
+
+    @Override
+    public void update(Queue.Snapshot queueSnapshot) throws ErrorOnPersistEntityException {
+        try {
+            QueueEntity queueEntity = jpaQueueRepository.findByIdWithTickets(queueSnapshot.id())
+                    .orElseThrow(() -> new NotFoundEntityException("Queue not found for update: " + queueSnapshot.id()));
+
+            queueEntity.update(queueSnapshot.lastTicketNumber());
+            queueEntity.getTickets().clear();
+            queueSnapshot.waitingTickets().stream()
+                    .map(TicketEntity::fromDomain)
+                    .forEach(queueEntity::addWaitingTicket);
+
+            jpaQueueRepository.save(queueEntity);
+
+        } catch (DataAccessException e) {
+            throw new ErrorOnPersistEntityException("Error on updating queue: " + e.getMessage(), e);
+        } catch (NoSuchElementException e) {
+            throw new ErrorOnPersistEntityException("Cannot update a queue that does not exist.", e);
+        }
+    }
+
+
 }

@@ -8,14 +8,15 @@ package com.geekersjoel237.weline.queue.appication.command.takeTicket;
 public record TakeTicketResponse(
         String ticketId,
         String ticketNumber,
-        boolean isTook
+        boolean isTook,
+        String message
 ) {
     public static TakeTicketResponse ofSuccess(String ticketId, String ticketNumber) {
-        return new TakeTicketResponse(ticketId, ticketNumber, true);
+        return new TakeTicketResponse(ticketId, ticketNumber, true, "Ticket took successfully !");
     }
 
 
     public static TakeTicketResponse ofFailure(String message) {
-        return new TakeTicketResponse(null, null, false);
+        return new TakeTicketResponse(null, null, false, message);
     }
 }

@@ -105,7 +105,7 @@ public class TakeTicketTest {
         assert 2 == queueRepository.ofId(queue.snapshot().id()).get().snapshot().waitingTickets().size();
     }
 
-    private TakeTicketResponse takeTicket(TakeTicketCommand command1) throws CustomIllegalArgumentException {
+    private TakeTicketResponse takeTicket(TakeTicketCommand command1) {
         var handler = new TakeTicketHandler(
                 queueRepository,
                 serviceRepository

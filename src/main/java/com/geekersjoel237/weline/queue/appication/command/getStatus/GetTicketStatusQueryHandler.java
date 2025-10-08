@@ -44,6 +44,7 @@ public class GetTicketStatusQueryHandler {
         return new TicketStatusResponse(
                 ticket.snapshot().number(),
                 queueStatus.lastDeliveredTicketNumber(),
+                queueStatus.currentTicketNumber(),
                 queueStatus.peopleBeforeYou(),
                 service.snapshot().name()
         );

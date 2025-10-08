@@ -69,4 +69,9 @@ public class TicketEntity extends BaseEntity {
             throw new RuntimeException(e);
         }
     }
+
+    public void update(String status) {
+        this.status = status;
+
+    }
 }

@@ -2,7 +2,7 @@ package com.geekersjoel237.weline.partners.infrastructure.web.controllers;
 
 import com.geekersjoel237.weline.partners.application.query.ListServicesQueryHandler;
 import com.geekersjoel237.weline.partners.application.query.ListServicesResponse;
-import com.geekersjoel237.weline.partners.infrastructure.web.api.ServiceApi;
+import com.geekersjoel237.weline.partners.infrastructure.web.api.ListServiceApi;
 import com.geekersjoel237.weline.shared.infrastructure.web.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,11 +15,11 @@ import java.util.List;
  * @author Geekers_Joel237
  **/
 @RestController
-public class ServiceController implements ServiceApi {
+public class ListServiceAction implements ListServiceApi {
 
     private final ListServicesQueryHandler listServicesQueryHandler;
 
-    public ServiceController(ListServicesQueryHandler listServicesQueryHandler) {
+    public ListServiceAction(ListServicesQueryHandler listServicesQueryHandler) {
         this.listServicesQueryHandler = listServicesQueryHandler;
     }
 

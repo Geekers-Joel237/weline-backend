@@ -5,6 +5,7 @@ import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentE
 import com.geekersjoel237.weline.shared.domain.vo.Id;
 import com.geekersjoel237.weline.shared.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class QueueEntity extends BaseEntity {
     @Column(nullable = false)
     private int lastTicketNumber;
 
+    @Getter
     @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TicketEntity> tickets = new ArrayList<>();
 
@@ -65,5 +67,9 @@ public class QueueEntity extends BaseEntity {
         } catch (CustomIllegalArgumentException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void update(int lastTicketNumber) {
+        this.lastTicketNumber = lastTicketNumber;
     }
 }

@@ -42,7 +42,10 @@ public class Queue {
     }
 
     public Ticket takeTicket(Id customerId, String prefix) throws CustomIllegalArgumentException {
-        checkIfCustomerHasTicket(customerId);
+        if (checkIfCustomerHasTicket(customerId)) {
+            //TODO: manage same customer want another ticket
+        }
+
         ++lastTicketNumber;
         waitingTickets.add(
                 Ticket.create(
@@ -53,10 +56,8 @@ public class Queue {
         return waitingTickets.getLast();
     }
 
-    private void checkIfCustomerHasTicket(Id customerId) {
-        if (waitingTickets.stream().anyMatch(t -> t.snapshot().customerId().equals(customerId.value()))) {
-            //TODO: manage same customer want another ticket
-        }
+    private boolean checkIfCustomerHasTicket(Id customerId) {
+        return waitingTickets.stream().anyMatch(t -> t.snapshot().customerId().equals(customerId.value()));
     }
 
     public Snapshot snapshot() {
@@ -95,42 +96,21 @@ public class Queue {
                 .orElse(null);
     }
 
-    public ProcessTicketResultSet process(Ticket ticket) {
-        var previousTicket = currentTicket();
-        try {
-            if (previousTicket != null) {
-                previousTicket.archive();
-            }
-            ticket.markCurrent();
-        } catch (CustomIllegalArgumentException e) {
-            var nextTicket = this.callNextTicket();
-            return ProcessTicketResultSet.ofFailure(previousTicket, nextTicket);
+
+    public Ticket callNextTicket() throws CustomIllegalArgumentException {
+        if (currentTicket() != null) {
+            currentTicket().archive();
         }
 
-        var nextTicket = this.callNextTicket();
-        return ProcessTicketResultSet.ofSuccess(previousTicket, ticket, nextTicket);
-    }
-
-    private Ticket callNextTicket() {
-        waitingTickets.remove(currentTicket());
-        return waitingTickets.getFirst();
-        //TODO: gerer cas file d'attente vide
-    }
-
-    public record ProcessTicketResultSet(
-            boolean isSuccess,
-            Ticket previousTicket,
-            Ticket currentTicket,
-            Ticket nextTicket) {
-
-        public static ProcessTicketResultSet ofSuccess(Ticket previousTicket, Ticket currentTicket, Ticket nextTicket) {
-            return new ProcessTicketResultSet(true, previousTicket, currentTicket, nextTicket);
+        if (this.waitingTickets.isEmpty()) {
+            return null;
         }
 
-        public static ProcessTicketResultSet ofFailure(Ticket previousTicket, Ticket nextTicket) {
-            return new ProcessTicketResultSet(false, previousTicket, null, nextTicket);
-        }
+        Ticket nextTicketToCall = this.waitingTickets.removeFirst();
+        nextTicketToCall.markCurrent();
+        return nextTicketToCall;
     }
+
 
     public record Snapshot(
             String id,

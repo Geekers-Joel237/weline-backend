@@ -44,7 +44,7 @@ public class TakeTicketHandler {
         } catch (CustomIllegalArgumentException e) {
             return TakeTicketResponse.ofFailure(e.getMessage());
         }
-        queueRepository.save(queue.snapshot());
+        queueRepository.update(queue.snapshot());
 
         return TakeTicketResponse.ofSuccess(ticket.snapshot().id(), ticket.snapshot().number());
     }
