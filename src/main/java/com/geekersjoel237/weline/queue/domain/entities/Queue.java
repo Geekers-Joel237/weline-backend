@@ -97,20 +97,26 @@ public class Queue {
     }
 
 
-    public Ticket callNextTicket() throws CustomIllegalArgumentException {
-        if (currentTicket() != null) {
-            currentTicket().archive();
+    public CallNextResult callNextTicket() throws CustomIllegalArgumentException {
+        Ticket previousTicket = currentTicket();
+
+        if (previousTicket != null) {
+            previousTicket.archive();
         }
 
         if (this.waitingTickets.isEmpty()) {
-            return null;
+            return new CallNextResult(previousTicket, null);
         }
 
-        Ticket nextTicketToCall = this.waitingTickets.removeFirst();
-        nextTicketToCall.markCurrent();
-        return nextTicketToCall;
+        Ticket nowServing = this.waitingTickets.removeFirst();
+        nowServing.markCurrent();
+
+        return new CallNextResult(previousTicket, currentTicket());
     }
 
+
+    public record CallNextResult(Ticket previousTicket, Ticket nowServing) {
+    }
 
     public record Snapshot(
             String id,

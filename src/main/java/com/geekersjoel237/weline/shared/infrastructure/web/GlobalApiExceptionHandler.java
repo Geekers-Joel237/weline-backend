@@ -16,13 +16,23 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({
-            TransactionalException.class, Exception.class
-    })
+    @ExceptionHandler(
+            TransactionalException.class
+    )
     public ResponseEntity<ApiResponse<Object>> handleTransactionalException(TransactionalException ex) {
         logger.error("An unexpected internal server error occurred", ex);
         return new ResponseEntity<>(
                 ApiResponse.failure(ex.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
+        logger.error("An unexpected internal server error occurred", ex);
+        String message = "An internal server error occurred. Please try again later.";
+        return new ResponseEntity<>(
+                ApiResponse.failure(message),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }

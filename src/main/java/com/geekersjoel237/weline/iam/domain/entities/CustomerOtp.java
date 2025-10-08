@@ -33,11 +33,12 @@ public class CustomerOtp {
     }
 
     public void verify(String otpCodeToVerify) throws CustomIllegalArgumentException {
-        if (this.otp.isExpired()) {
-            throw new CustomIllegalArgumentException("OTP code has expired");
-        }
         if (!this.otp.value().equals(otpCodeToVerify)) {
             throw new CustomIllegalArgumentException("Invalid OTP code");
+        }
+
+        if (this.otp.isExpired()) {
+            throw new CustomIllegalArgumentException("OTP code has expired");
         }
     }
 

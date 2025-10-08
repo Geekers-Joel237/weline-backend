@@ -27,6 +27,7 @@ public class QueueEntity extends BaseEntity {
     @Column(nullable = false)
     private int lastTicketNumber;
 
+    @OrderBy("createdAt ASC")
     @Getter
     @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TicketEntity> tickets = new ArrayList<>();

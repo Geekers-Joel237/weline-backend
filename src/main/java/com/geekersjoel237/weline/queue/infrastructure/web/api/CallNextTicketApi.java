@@ -26,7 +26,7 @@ public interface CallNextTicketApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Ticket suivant appelé avec succès"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "File d'attente non trouvée")
     })
-    @PostMapping("/{queueId}/next")
+    @PostMapping("/api/v1/queues/{queueId}/next")
     ResponseEntity<ApiResponse<CallNextTicketResponse>> callNextTicket(
             @Parameter(description = "ID de la file d'attente à faire avancer", required = true) @PathVariable String queueId
     );

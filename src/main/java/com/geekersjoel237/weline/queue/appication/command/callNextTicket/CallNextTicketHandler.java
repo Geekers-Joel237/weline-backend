@@ -1,6 +1,6 @@
 package com.geekersjoel237.weline.queue.appication.command.callNextTicket;
 
-import com.geekersjoel237.weline.queue.domain.entities.Ticket;
+import com.geekersjoel237.weline.queue.domain.entities.Queue;
 import com.geekersjoel237.weline.queue.domain.repositories.QueueRepository;
 import com.geekersjoel237.weline.queue.domain.repositories.TicketRepository;
 import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
@@ -29,21 +29,22 @@ public class CallNextTicketHandler {
     public CallNextTicketResponse handle(CallNextTicketCommand command) {
         var queue = queueRepository.ofId(command.queueId())
                 .orElseThrow(() -> new NotFoundEntityException("Queue with id " + command.queueId() + " not found."));
-
-        Ticket ticket;
+        Queue.CallNextResult result;
         try {
-            ticket = queue.callNextTicket();
+            result = queue.callNextTicket();
         } catch (CustomIllegalArgumentException e) {
             return CallNextTicketResponse.ofFailure(e.getMessage());
         }
 
-        queueRepository.update(queue.snapshot());
 
-        if (ticket == null) {
+        if (result.nowServing() == null) {
             return CallNextTicketResponse.ofFailure("No ticket to call !");
         }
 
-        ticketRepository.update(ticket.snapshot());
-        return CallNextTicketResponse.ofSuccess(ticket.snapshot().id(), ticket.snapshot().number());
+        ticketRepository.update(result.previousTicket().snapshot());
+        ticketRepository.update(result.nowServing().snapshot());
+        queueRepository.update(queue.snapshot());
+
+        return CallNextTicketResponse.ofSuccess(result.nowServing().snapshot().id(), result.nowServing().snapshot().number());
     }
 }
