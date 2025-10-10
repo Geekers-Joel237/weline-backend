@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Created on 05/10/2025
@@ -68,10 +69,10 @@ public class PostgresQueueRepository implements QueueRepository {
 
             queueEntity.update(queueSnapshot.lastTicketNumber());
             queueEntity.getTickets().clear();
-            queueSnapshot.waitingTickets().stream()
-                    .map(TicketEntity::fromDomain)
-                    .forEach(queueEntity::addTicket);
-
+            Stream.concat(
+                    queueSnapshot.waitingTickets().stream(),
+                    Stream.ofNullable(queueSnapshot.currentTicket())
+            ).forEach(ticketSnapshot -> queueEntity.addTicket(TicketEntity.fromDomain(ticketSnapshot)));
             jpaQueueRepository.save(queueEntity);
 
         } catch (DataAccessException e) {
