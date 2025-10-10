@@ -32,7 +32,7 @@ L'intégralité de l'environnement de développement est gérée par Docker Comp
 1.  **Clonez le dépôt :**
 
     ```bash
-    git clone [URL_DE_VOTRE_DEPOT_GIT]
+    git clone https://github.com/Geekers-Joel237/weline-backend.git
     cd weline-backend
     ```
 
@@ -40,6 +40,7 @@ L'intégralité de l'environnement de développement est gérée par Docker Comp
     Cette commande unique va construire l'image Docker de l'application Java, télécharger les images de PostgreSQL et Redis, et démarrer les trois services en les reliant entre eux.
 
     ```bash
+    cp .env.example .env
     docker-compose up --build
     ```
 

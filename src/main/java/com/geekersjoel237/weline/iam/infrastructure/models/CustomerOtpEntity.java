@@ -7,6 +7,7 @@ import com.geekersjoel237.weline.shared.domain.vo.Id;
 import com.geekersjoel237.weline.shared.infrastructure.persistence.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,9 @@ import java.time.Instant;
  **/
 
 @Entity
-@Table(name = "customer_otps")
+@Table(name = "customer_otps", indexes = {
+        @Index(name = "idx_customer_id", columnList = "customerId", unique = true)
+})
 @Getter
 @Setter
 @NoArgsConstructor

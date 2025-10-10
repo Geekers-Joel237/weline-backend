@@ -15,4 +15,6 @@ public interface TicketRepository {
     Optional<Ticket> ofId(String ticketId);
 
     void update(Ticket.Snapshot ticket) throws ErrorOnPersistEntityException;
+
+    void remove(Ticket.Snapshot ticket) throws ErrorOnPersistEntityException;
 }

@@ -6,6 +6,7 @@ import com.geekersjoel237.weline.shared.domain.vo.Id;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created on 05/10/2025
@@ -18,12 +19,14 @@ public class Queue {
     private final Id id;
     private final Id serviceId;
     private List<Ticket> waitingTickets;
+    private Ticket currentTicket;
     private int lastTicketNumber;
 
     private Queue(Id id, Id serviceId, int lastTicketNumber) {
         this.id = id;
         this.serviceId = serviceId;
         this.lastTicketNumber = lastTicketNumber;
+        this.currentTicket = null;
         waitingTickets = new LinkedList<>();
     }
 
@@ -37,7 +40,11 @@ public class Queue {
 
     public static Queue createFromAdapter(Id queueId, Id serviceId, int lastTicketNumber, List<Ticket> tickets) {
         var queue = new Queue(queueId, serviceId, lastTicketNumber);
-        queue.waitingTickets = tickets;
+        queue.currentTicket = tickets.stream()
+                .filter(t -> Ticket.StatusEnum.CURRENT.name().equals(t.snapshot().status()))
+                .findFirst().orElse(null);
+        queue.waitingTickets = tickets.stream()
+                .filter(t -> Ticket.StatusEnum.PENDING.name().equals(t.snapshot().status())).collect(Collectors.toList());
         return queue;
     }
 
@@ -65,7 +72,8 @@ public class Queue {
                 id.value(),
                 serviceId.value(),
                 lastTicketNumber,
-                waitingTickets.stream().map(Ticket::snapshot).toList()
+                waitingTickets.stream().map(Ticket::snapshot).toList(),
+                currentTicket != null ? currentTicket.snapshot() : null
         );
     }
 
@@ -74,9 +82,8 @@ public class Queue {
     }
 
     public QueueStatus getStatusForTicket(Id ticketId) {
-        String lastDeliveredTicketNumber = (lastTicket() != null)
-                ? lastTicket().snapshot().number()
-                : RAS_SYMBOL;
+        String lastDeliveredTicketNumber = !waitingTickets.isEmpty() ?
+                waitingTickets.getLast().snapshot().number() : RAS_SYMBOL;
 
         long peopleBeforeYou = waitingTickets.stream()
                 .takeWhile(ticket -> !ticket.snapshot().id().equals(ticketId.value()))
@@ -89,29 +96,27 @@ public class Queue {
         return new QueueStatus(lastDeliveredTicketNumber, peopleBeforeYou, currentTicketNumber);
     }
 
+
     public Ticket currentTicket() {
-        return waitingTickets.stream()
-                .filter(t -> Ticket.StatusEnum.CURRENT.name().equals(t.snapshot().status()))
-                .findFirst()
-                .orElse(null);
+        return this.currentTicket;
     }
 
 
     public CallNextResult callNextTicket() throws CustomIllegalArgumentException {
-        Ticket previousTicket = currentTicket();
+        Ticket previousTicket = this.currentTicket;
 
         if (previousTicket != null) {
             previousTicket.archive();
         }
 
-        if (this.waitingTickets.isEmpty()) {
+        if (waitingTickets.isEmpty()) {
+            this.currentTicket = null;
             return new CallNextResult(previousTicket, null);
         }
 
-        Ticket nowServing = this.waitingTickets.removeFirst();
-        nowServing.markCurrent();
-
-        return new CallNextResult(previousTicket, currentTicket());
+        this.currentTicket = this.waitingTickets.removeFirst();
+        this.currentTicket.markCurrent();
+        return new CallNextResult(previousTicket, this.currentTicket);
     }
 
 
@@ -122,7 +127,8 @@ public class Queue {
             String id,
             String serviceId,
             int lastTicketNumber,
-            List<Ticket.Snapshot> waitingTickets
+            List<Ticket.Snapshot> waitingTickets,
+            Ticket.Snapshot currentTicket
     ) {
     }
 

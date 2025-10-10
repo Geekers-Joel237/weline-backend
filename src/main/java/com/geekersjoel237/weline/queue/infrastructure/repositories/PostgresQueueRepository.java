@@ -70,7 +70,7 @@ public class PostgresQueueRepository implements QueueRepository {
             queueEntity.getTickets().clear();
             queueSnapshot.waitingTickets().stream()
                     .map(TicketEntity::fromDomain)
-                    .forEach(queueEntity::addWaitingTicket);
+                    .forEach(queueEntity::addTicket);
 
             jpaQueueRepository.save(queueEntity);
 

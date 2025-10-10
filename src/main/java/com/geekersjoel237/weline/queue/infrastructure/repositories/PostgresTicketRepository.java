@@ -42,4 +42,15 @@ public class PostgresTicketRepository implements TicketRepository {
             throw new ErrorOnPersistEntityException("Error on persist ticket with id " + ticket.id());
         }
     }
+
+    @Override
+    public void remove(Ticket.Snapshot ticket) throws ErrorOnPersistEntityException {
+        try {
+            update(ticket);
+            jpaTicketRepository.deleteById(ticket.id());
+        } catch (DataAccessException e) {
+            throw new ErrorOnPersistEntityException("Error on deleting ticket with id " + ticket.id());
+        }
+
+    }
 }

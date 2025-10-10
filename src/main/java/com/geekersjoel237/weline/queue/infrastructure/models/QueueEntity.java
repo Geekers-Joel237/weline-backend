@@ -1,6 +1,7 @@
 package com.geekersjoel237.weline.queue.infrastructure.models;
 
 import com.geekersjoel237.weline.queue.domain.entities.Queue;
+import com.geekersjoel237.weline.queue.domain.entities.Ticket;
 import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;
 import com.geekersjoel237.weline.shared.domain.vo.Id;
 import com.geekersjoel237.weline.shared.infrastructure.persistence.BaseEntity;
@@ -8,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,12 +46,17 @@ public class QueueEntity extends BaseEntity {
                 queue.serviceId(),
                 queue.lastTicketNumber()
         );
-        queue.waitingTickets().forEach(ticket -> entity.addWaitingTicket(TicketEntity.fromDomain(ticket)));
+
+        Stream.concat(
+                queue.waitingTickets().stream(),
+                Stream.ofNullable(queue.currentTicket())
+        ).forEach(ticketSnapshot -> entity.addTicket(TicketEntity.fromDomain(ticketSnapshot)));
+
         return entity;
     }
 
 
-    public void addWaitingTicket(TicketEntity ticket) {
+    public void addTicket(TicketEntity ticket) {
         this.tickets.add(ticket);
         ticket.setQueue(this);
     }

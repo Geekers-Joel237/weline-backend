@@ -41,4 +41,9 @@ public class InMemoryTicketRepository implements TicketRepository {
         });
 
     }
+
+    @Override
+    public void remove(Ticket.Snapshot ticket) throws ErrorOnPersistEntityException {
+        tickets.remove(ticket.id());
+    }
 }

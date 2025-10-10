@@ -41,9 +41,10 @@ public class CallNextTicketHandler {
             return CallNextTicketResponse.ofFailure("No ticket to call !");
         }
 
-        ticketRepository.update(result.previousTicket().snapshot());
+        if (result.previousTicket() != null) {
+            ticketRepository.remove(result.previousTicket().snapshot());
+        }
         ticketRepository.update(result.nowServing().snapshot());
-        queueRepository.update(queue.snapshot());
 
         return CallNextTicketResponse.ofSuccess(result.nowServing().snapshot().id(), result.nowServing().snapshot().number());
     }

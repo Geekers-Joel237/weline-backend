@@ -1,17 +1,17 @@
 services:
-  # Notre application Spring Boot
+
   backend:
-    build: . # Construit l'image à partir du Dockerfile local
+    build: .
     container_name: weline_backend
     restart: always
     ports:
-      - "8088:8080" # Expose le port de l'app sur la machine hôte
+      - "8088:8080"
     env_file:
       - ./.env
     environment:
-      # On configure l'app pour qu'elle se connecte aux autres conteneurs
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/weline_db
-      - SPRING_DATASOURCE_USERNAME=weline
+
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_REDIS_HOST=redis_cache
     depends_on:
@@ -20,22 +20,28 @@ services:
     networks:
       - weline-network
 
-      # La base de données PostgreSQL
+
   postgres_db:
     image: postgres:16-alpine
     container_name: postgres_db
+    env_file:
+      - ./.env
     environment:
-      - POSTGRES_DB=weline_db
-      - POSTGRES_USER=weline
-      - POSTGRES_PASSWORD=supersecret
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432" # Optionnel : pour se connecter à la DB depuis la machine locale
     networks:
       - weline-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # Le cache Redis
   redis_cache:
     image: redis:7-alpine
     container_name: redis_cache
