@@ -5,7 +5,7 @@ import com.geekersjoel237.weline.iam.application.command.register.RegisterCustom
 import com.geekersjoel237.weline.iam.application.command.register.RegisterCustomerHandler;
 import com.geekersjoel237.weline.iam.domain.repositories.CustomerRepository;
 import com.geekersjoel237.weline.iam.domain.repositories.OtpRepository;
-import com.geekersjoel237.weline.iam.domain.repositories.OtpSender;
+import com.geekersjoel237.weline.notifications.OtpSender;
 import com.geekersjoel237.weline.iam.domain.vo.Otp;
 import com.geekersjoel237.weline.iam.domain.vo.PhoneNumber;
 import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentException;

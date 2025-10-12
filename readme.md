@@ -101,7 +101,7 @@ Statut du développement des fonctionnalités clés pour la version minimum viab
 
 - [x] **Epic 1 : Fondations du Projet & Infrastructure**
 - [x] **Epic 2 : Onboarding & Authentification des Utilisateurs**
-- [ ] **Epic 3 : Le Cœur de la File d'Attente (Expérience Utilisateur)**
+- [x] **Epic 3 : Le Cœur de la File d'Attente (Expérience Utilisateur)**
 - [ ] **Epic 4 : Le Dashboard de l'Agent**
 
 -----

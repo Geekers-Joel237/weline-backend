@@ -1,6 +1,6 @@
 package com.geekersjoel237.weline.iam.units;
 
-import com.geekersjoel237.weline.iam.domain.repositories.OtpSender;
+import com.geekersjoel237.weline.notifications.OtpSender;
 
 import java.util.ArrayList;
 import java.util.List;

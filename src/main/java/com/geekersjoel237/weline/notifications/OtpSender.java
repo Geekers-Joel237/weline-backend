@@ -1,4 +1,4 @@
-package com.geekersjoel237.weline.iam.domain.repositories;
+package com.geekersjoel237.weline.notifications;
 
 import com.geekersjoel237.weline.iam.domain.exceptions.ErrorOnSendOtpCodeException;
 

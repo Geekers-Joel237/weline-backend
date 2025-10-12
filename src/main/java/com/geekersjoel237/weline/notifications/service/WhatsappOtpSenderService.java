@@ -1,7 +1,7 @@
-package com.geekersjoel237.weline.iam.infrastructure.service;
+package com.geekersjoel237.weline.notifications.service;
 
 import com.geekersjoel237.weline.iam.domain.exceptions.ErrorOnSendOtpCodeException;
-import com.geekersjoel237.weline.iam.domain.repositories.OtpSender;
+import com.geekersjoel237.weline.notifications.OtpSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
