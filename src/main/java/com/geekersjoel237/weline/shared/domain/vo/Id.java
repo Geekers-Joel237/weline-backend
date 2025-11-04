@@ -7,7 +7,7 @@ import com.geekersjoel237.weline.shared.domain.exceptions.CustomIllegalArgumentE
  *
  * @author Geekers_Joel237
  **/
-public class Id {
+public final class Id {
     private final String value;
 
     private Id(String value) {

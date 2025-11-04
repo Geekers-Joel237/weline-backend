@@ -10,10 +10,10 @@ services:
       - ./.env
     environment:
 
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/${DB_NAME}
-      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-      - SPRING_REDIS_HOST=redis_cache
+      - SPRING_REDIS_HOST=${REDIS_HOST}
     depends_on:
       - postgres_db
       - redis_cache
