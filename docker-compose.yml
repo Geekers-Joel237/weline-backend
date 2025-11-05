@@ -9,11 +9,10 @@ services:
     env_file:
       - ./.env
     environment:
-
-      - SPRING_DATASOURCE_URL=${DB_URL}
-      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-      - SPRING_REDIS_HOST=${REDIS_HOST}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:${PGPORT}/${PGDATABASE}
+      - SPRING_DATASOURCE_USERNAME=${PGUSER}
+      - SPRING_DATASOURCE_PASSWORD=${PGPASSWORD}
+      - SPRING_REDIS_HOST=${REDISHOST}
     depends_on:
       - postgres_db
       - redis_cache
@@ -27,9 +26,9 @@ services:
     env_file:
       - ./.env
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${PGDATABASE}
+      - POSTGRES_USER=${PGUSER}
+      - POSTGRES_PASSWORD=${PGPASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -37,7 +36,7 @@ services:
     networks:
       - weline-network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${PGUSER} -d ${PGDATABASE}" ]
       interval: 10s
       timeout: 5s
       retries: 5
