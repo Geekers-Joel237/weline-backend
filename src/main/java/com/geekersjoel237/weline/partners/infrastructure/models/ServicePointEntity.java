@@ -17,7 +17,7 @@ import java.util.List;
  **/
 
 @Entity
-@Table(name = "service_points")
+@Table(name = "service_points", indexes = @Index(columnList = "partner_id"))
 @Getter
 @NoArgsConstructor
 public class ServicePointEntity extends BaseEntity {
